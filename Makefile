@@ -1,4 +1,4 @@
-all: compile
+all: compile 
 
 deps/elixir/rel/elixir/bin/elixir:
 		@git clone https://github.com/elixir-lang/elixir deps/elixir
@@ -7,8 +7,8 @@ deps/elixir/rel/elixir/bin/elixir:
 
 prepare: deps/elixir/rel/elixir/bin/elixir
 
-compile: prepare
-		@ERL_LIBS=deps/elixir/rel/elixir/lib ./rebar compile
+compile:
+		@./rebar compile
 
 iex: prepare
 		@ERL_LIBS=deps ./deps/elixir/rel/elixir/bin/iex -pa ebin
