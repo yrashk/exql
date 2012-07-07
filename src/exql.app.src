@@ -1,0 +1,12 @@
+{application, exql,
+ [
+  {description, "ExSQL"},
+  {vsn, git},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  elixir
+                 ]},
+  {env, []}
+ ]}.
