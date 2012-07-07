@@ -8,3 +8,6 @@ prepare: deps/elixir/rel/elixir/bin/elixir
 
 compile: prepare
 		@ERL_LIBS=deps/elixir/rel/elixir/lib ./rebar compile
+
+iex: prepare
+		@ERL_LIBS=deps ./deps/elixir/rel/elixir/bin/iex -pa ebin
