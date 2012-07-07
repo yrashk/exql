@@ -34,3 +34,20 @@ defrecord ExQL.Select, dict: [fields: :*] do
     statement(:from, query), statement(:where, query), statement(:group, query)] /> ExQL.Utils.space
   end
 end
+
+defimpl Binary.Inspect, for: ExQL.Select do 
+  def inspect(thing), do: statement(thing.statement, [])
+
+  defp statement([], acc), do: iolist_to_binary(List.reverse(acc))
+  defp statement([{:value, value}|rest], acc) do
+    statement(rest, [Binary.Inspect.inspect(value)|acc])
+  end
+  defp statement([list|rest], acc) when is_list(list) do
+    new_acc = statement(list, [])
+    statement(rest, [new_acc|acc])
+  end
+  defp statement([head|rest], acc) do
+    statement(rest, [head|acc])
+  end
+
+end
