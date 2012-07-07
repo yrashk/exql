@@ -36,8 +36,7 @@ defrecord ExQL.Select, [fields: :*,
   end
 
   def statement(query) do
-    ExQL.Utils.space(
     ["SELECT", statement(:modifiers, query), statement(:fields, query),
-    statement(:from, query), statement(:where, query), statement(:group, query)])
+    statement(:from, query), statement(:where, query), statement(:group, query)] /> ExQL.Utils.space
   end
 end
