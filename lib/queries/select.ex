@@ -7,4 +7,5 @@ defrecord ExQL.Select, [fields: "*",
                         aliases: [],
                         group: []
                         ] do
+  use ExQL.Query
 end
