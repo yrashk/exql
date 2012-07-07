@@ -28,9 +28,16 @@ defrecord ExQL.Select, [fields: :*,
     end
   end
 
+  def statement(:group, query) do
+    case group(query) do
+      [] -> nil
+      group_by -> ["GROUP BY", ExQL.Expression.join(group_by, :raw, ", ")]
+    end
+  end
+
   def statement(query) do
     ExQL.Utils.space(
     ["SELECT", statement(:modifiers, query), statement(:fields, query),
-    statement(:from, query), statement(:where, query)])
+    statement(:from, query), statement(:where, query), statement(:group, query)])
   end
 end
