@@ -5,11 +5,7 @@ defmodule ExQL do
     end
   end
 
-  defmacro select(options // []) do
-    quote do
-      ExQL.Select.new(unquote(options))
-    end
-  end
+  defdelegate [select: 0], to: ExQL.Select, as: :new
 
   defmacro expr(c) do
     quote do

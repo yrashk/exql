@@ -14,6 +14,7 @@ defimpl ExQL.Expression, for: Number do
 end
 
 defimpl ExQL.Expression, for: Atom do
+  def join(nil, _, _delim), do: ""
   def join(value, _, _delim), do: atom_to_binary(value)
 end
 
