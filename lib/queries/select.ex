@@ -2,6 +2,7 @@ defrecord ExQL.Select, dict: [fields: :*] do
   use ExQL.Query
 
   def from(v, query), do: query.dict Keyword.put(query.dict, :from, v)
+  def where(v, query), do: query.dict Keyword.put(query.dict, :where, v)
 
   def statement(:modifiers, query) do
     ExQL.Expression.join(dict(query)[:modifiers], :raw, " ")
