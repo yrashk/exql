@@ -24,15 +24,12 @@ end
 defrecord ExQL.Condition, op: nil, exprs: [] do
   use ExQL.Op, [:<, :<=, :>=, :>, :==, :and, :or]
 
-  
-  def to_string(type, condition) do
-    delim = to_binary(op(condition))
-    [[_, first]|rest] = lc value inlist exprs(condition), do: [delim, ExQL.Expression.join(value, type, delim)]
-    ["(",[first|rest],")"]
-  end
-
 end
 
 defimpl ExQL.Expression, for: ExQL.Condition do
-  def join(condition, type, _delim), do: ExQL.Condition.to_string(type, condition)
+  def join(condition, type, _delim) do
+    delim = to_binary(ExQL.Condition.op(condition))
+    [[_, first]|rest] = lc value inlist ExQL.Condition.exprs(condition), do: [delim, ExQL.Expression.join(value, type, delim)]
+    ["(",[first|rest],")"]
+  end
 end
