@@ -9,24 +9,24 @@ defrecord ExQL.Select, dict: [fields: :*] do
   end
 
   def statement(:fields, query) do
-    ExQL.Expression.join(dict(query)[:fields], :raw, ", ")
+    ExQL.Expression.join(dict(query)[:fields], :raw, ",")
   end
 
   def statement(:from, query) do
-    ["FROM", ExQL.Expression.join(dict(query)[:from], :raw, ", ")]
+    ["FROM", ExQL.Expression.join(dict(query)[:from], :raw, ",")]
   end
 
   def statement(:where, query) do
     case dict(query)[:where] do
       nil -> nil
-      conds -> ["WHERE", ExQL.Expression.join(conds, :value, " AND ")]
+      conds -> ["WHERE", ExQL.Expression.join(conds, :value, "AND")]
     end
   end
 
   def statement(:group, query) do
     case dict(query)[:group] do
       nil -> nil
-      group_by -> ["GROUP BY", ExQL.Expression.join(group_by, :raw, ", ")]
+      group_by -> ["GROUP BY", ExQL.Expression.join(group_by, :raw, ",")]
     end
   end
 
