@@ -16,7 +16,10 @@ defmodule ExQL do
   end
 
   defmacro select(block // [do: nil]) do
-    query = ExQL.Select.new
+    body((quote do: import ExQL.Select),ExQL.Select.new, block)
+  end
+
+  defp body(prologue, query, block) do
     case block[:do] do
       {:__block__, _, body} -> :ok
       nil -> body = []
@@ -35,7 +38,7 @@ defmodule ExQL do
       [expr] -> 
         quote do
           try do
-            import ExQL.Select
+            unquote(prologue)
             require ExQL.Utils
             ExQL.Utils.back_pipeline(unquote(query), unquote(expr))
           end
@@ -43,7 +46,7 @@ defmodule ExQL do
       [l,r] -> 
         quote do
           try do
-            import ExQL.Select
+            unquote(prologue)
             require ExQL.Utils
             ExQL.Utils.back_pipeline(unquote(query), ExQL.Utils.back_pipeline(unquote(l), unquote(r)))
           end
