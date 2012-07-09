@@ -6,12 +6,11 @@ defrecord ExQL.Select, dict: [fields: :*] do
 
   defmacro where(block, query) when is_tuple(block) do
     quote do
-      f = fn() ->
+      try do
         import Elixir.Builtin, except: unquote(ExQL.Condition.__ops__)
         import ExQL.Condition, only: unquote(ExQL.Condition.__ops__)
-        unquote(block)
+        ExQL.Select._where(unquote(block), unquote(query))
       end
-      ExQL.Select._where(f.(), unquote(query))
     end
   end
   defmacro where(value, query) do

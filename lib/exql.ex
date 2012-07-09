@@ -24,15 +24,19 @@ defmodule ExQL do
       [] -> quote do: unquote(query) 
       [expr] -> 
         quote do
-          import ExQL.Select
-          require ExQL.Utils
-          ExQL.Utils.back_pipeline(unquote(query), unquote(expr))
+          try do
+            import ExQL.Select
+            require ExQL.Utils
+            ExQL.Utils.back_pipeline(unquote(query), unquote(expr))
+          end
         end
       [l,r] -> 
         quote do
-          import ExQL.Select
-          require ExQL.Utils
-          ExQL.Utils.back_pipeline(unquote(query), ExQL.Utils.back_pipeline(unquote(l), unquote(r)))
+          try do
+            import ExQL.Select
+            require ExQL.Utils
+            ExQL.Utils.back_pipeline(unquote(query), ExQL.Utils.back_pipeline(unquote(l), unquote(r)))
+          end
         end
     end
   end
