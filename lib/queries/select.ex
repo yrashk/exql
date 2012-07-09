@@ -1,23 +1,23 @@
 defrecord ExQL.Select, dict: [fields: :*] do
   use ExQL.Query
 
-  def fields(query, v), do: query.dict Keyword.put(query.dict, :fields, v)
-  def from(query, v), do: query.dict Keyword.put(query.dict, :from, v)
+  def fields(v, query), do: query.dict Keyword.put(query.dict, :fields, v)
+  def from(v, query), do: query.dict Keyword.put(query.dict, :from, v)
 
-  defmacro where(query, block) when is_tuple(block) do
+  defmacro where(block, query) when is_tuple(block) do
     quote do
       f = fn() ->
         import Elixir.Builtin, except: unquote(ExQL.Condition.__ops__)
         import ExQL.Condition, only: unquote(ExQL.Condition.__ops__)
         unquote(block)
       end
-      ExQL.Select._where(unquote(query), f.())
+      ExQL.Select._where(f.(), unquote(query))
     end
   end
-  defmacro where(query, value) do
-    quote do: ExQL.Select._where(unquote(query), unquote(value))
+  defmacro where(value, query) do
+    quote do: ExQL.Select._where(unquote(value), unquote(query))
   end
-  def _where(query, v), do: query.dict Keyword.put(query.dict, :where, v)
+  def _where(v, query), do: query.dict Keyword.put(query.dict, :where, v)
 
   def statement(:modifiers, query) do
     ExQL.Expression.join(dict(query)[:modifiers], :raw, " ")

@@ -16,7 +16,7 @@ defmodule ExQL do
     List.reverse(Enum.reduce body, [], 
                 fn(expr, acc) ->
                   case acc do
-                    [i] -> [{:/>, 0, [i, expr]}]
+                    [i] -> [(quote do: ExQL.Utils.back_pipeline(unquote(i), unquote(expr)))]
                     _ -> [expr|acc]
                   end
                 end)
@@ -25,12 +25,14 @@ defmodule ExQL do
       [expr] -> 
         quote do
           import ExQL.Select
-          unquote(query) /> unquote(expr)
+          require ExQL.Utils
+          ExQL.Utils.back_pipeline(unquote(query), unquote(expr))
         end
       [l,r] -> 
         quote do
           import ExQL.Select
-          unquote(query) /> (unquote(l) /> unquote(r))
+          require ExQL.Utils
+          ExQL.Utils.back_pipeline(unquote(query), ExQL.Utils.back_pipeline(unquote(l), unquote(r)))
         end
     end
   end
