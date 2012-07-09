@@ -5,6 +5,13 @@ defmodule ExQL.Query do
     end
   end
 
+  defmacro accessor(name) do
+    quote do
+      def unquote(name).(v, query), do: query.dict Keyword.put(query.dict, unquote(name), v)
+      def unquote(name).(query), do: query.dict[unquote(name)]
+    end
+  end
+
   def statement(_query), do: ""
 
   defoverridable [statement: 1]
