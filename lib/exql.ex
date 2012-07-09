@@ -5,6 +5,16 @@ defmodule ExQL do
     end
   end
 
+  defmacro expr(block) do
+    quote do
+      try do
+        import Elixir.Builtin, except: unquote(ExQL.Condition.__ops__)
+        import ExQL.Condition, only: unquote(ExQL.Condition.__ops__)
+        unquote(block)
+      end
+    end
+  end
+
   defmacro select(block // [do: nil]) do
     query = ExQL.Select.new
     case block[:do] do
