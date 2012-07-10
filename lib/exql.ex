@@ -15,8 +15,17 @@ defmodule ExQL do
     end
   end
 
-  defmacro select(block // [do: nil]) do
+  defmacro select do
+    body((quote do: import ExQL.Select),ExQL.Select.new, [do: nil])
+  end
+
+  defmacro select([do: block]) do
     body((quote do: import ExQL.Select),ExQL.Select.new, block)
+  end
+
+  defmacro select(keywords) when is_list(keywords) do
+    block = {:__block__, 0, (lc {k,v} inlist keywords, do: {k, 0, [v]})}
+    body((quote do: import ExQL.Select),ExQL.Select.new, [do: block])
   end
 
   defp body(prologue, query, block) do
